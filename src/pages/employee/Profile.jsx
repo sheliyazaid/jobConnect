@@ -2,13 +2,16 @@ import { useState, useEffect } from 'react';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../../config/firebase';
 import { useAuth } from '../../contexts/AuthContext';
-import { Save, X, Edit2, Mail, Phone, Briefcase, Award } from 'lucide-react';
+import { uploadToCloudinary } from '../../config/cloudinary';
+import { Save, X, Edit2, Mail, Phone, Briefcase, Award, Upload, Loader } from 'lucide-react';
 
 const EmployeeProfile = () => {
   const { currentUser, userData } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [profileImage, setProfileImage] = useState(userData?.profileImage || '');
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -41,6 +44,7 @@ const EmployeeProfile = () => {
             bio: data.bio || '',
             skills: Array.isArray(data.skills) ? data.skills : [],
           });
+          setProfileImage(data.profileImage || '');
         }
       } catch (error) {
         console.error('Error fetching profile:', error);
@@ -59,6 +63,35 @@ const EmployeeProfile = () => {
       ...prev,
       [name]: value,
     }));
+  };
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      alert('Please select an image file');
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      alert('Image size must be less than 5MB');
+      return;
+    }
+
+    setUploadingImage(true);
+    try {
+      const imageUrl = await uploadToCloudinary(file, 'jobconnect/profiles');
+      setProfileImage(imageUrl);
+      alert('Image uploaded successfully!');
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      alert('Failed to upload image');
+    } finally {
+      setUploadingImage(false);
+    }
   };
 
   const addSkill = () => {
@@ -83,7 +116,10 @@ const EmployeeProfile = () => {
     try {
       if (!currentUser) return;
       const docRef = doc(db, 'users', currentUser.uid);
-      await updateDoc(docRef, formData);
+      await updateDoc(docRef, {
+        ...formData,
+        profileImage: profileImage,
+      });
       alert('Profile updated successfully!');
       setIsEditing(false);
     } catch (error) {
@@ -146,6 +182,46 @@ const EmployeeProfile = () => {
         <div className="card bg-white">
           {isEditing ? (
             <form className="space-y-6">
+              {/* Profile Image Upload */}
+              <div className="flex flex-col items-center gap-4 pb-6 border-b border-secondary-200">
+                <div className="relative">
+                  {profileImage ? (
+                    <img
+                      src={profileImage}
+                      alt="Profile"
+                      className="w-32 h-32 rounded-full object-cover border-4 border-primary-200"
+                    />
+                  ) : (
+                    <div className="w-32 h-32 rounded-full bg-secondary-100 border-4 border-primary-200 flex items-center justify-center">
+                      <Award size={48} className="text-secondary-400" />
+                    </div>
+                  )}
+                  <label className="absolute bottom-0 right-0 bg-primary-600 hover:bg-primary-700 text-white rounded-full p-2 cursor-pointer transition">
+                    <Upload size={18} />
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      disabled={uploadingImage}
+                      className="hidden"
+                    />
+                  </label>
+                </div>
+                <div className="text-center">
+                  <p className="text-secondary-900 font-semibold">Upload Profile Photo</p>
+                  <p className="text-secondary-600 text-sm">
+                    {uploadingImage ? (
+                      <span className="flex items-center justify-center gap-2">
+                        <Loader size={14} className="animate-spin" />
+                        Uploading...
+                      </span>
+                    ) : (
+                      'JPG, PNG (Max 5MB)'
+                    )}
+                  </p>
+                </div>
+              </div>
+
               {/* Name Section */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
@@ -331,15 +407,30 @@ const EmployeeProfile = () => {
             </form>
           ) : (
             <div className="space-y-6">
-              {/* Profile Header */}
-              <div className="pb-6 border-b-2 border-primary-200">
-                <h2 className="text-3xl font-bold text-secondary-900 mb-2">
-                  {formData.firstName} {formData.lastName}
-                </h2>
-                <p className="text-secondary-700 flex items-center gap-2 text-lg">
-                  <Briefcase size={20} />
-                  {formData.profession}
-                </p>
+              {/* Profile Image and Header */}
+              <div className="flex items-center gap-6 pb-6 border-b-2 border-primary-200">
+                <div>
+                  {profileImage ? (
+                    <img
+                      src={profileImage}
+                      alt="Profile"
+                      className="w-32 h-32 rounded-full object-cover border-4 border-primary-200"
+                    />
+                  ) : (
+                    <div className="w-32 h-32 rounded-full bg-secondary-100 border-4 border-primary-200 flex items-center justify-center">
+                      <Award size={48} className="text-secondary-400" />
+                    </div>
+                  )}
+                </div>
+                <div>
+                  <h2 className="text-3xl font-bold text-secondary-900 mb-2">
+                    {formData.firstName} {formData.lastName}
+                  </h2>
+                  <p className="text-secondary-700 flex items-center gap-2 text-lg">
+                    <Briefcase size={20} />
+                    {formData.profession}
+                  </p>
+                </div>
               </div>
 
               {/* Contact Information */}

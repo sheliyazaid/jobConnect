@@ -20,12 +20,25 @@ import EmployeeJobs from './pages/employee/Jobs';
 import EmployeeProfile from './pages/employee/Profile';
 import EmployeeApplications from './pages/employee/Applications';
 import EmployeeSkills from './pages/employee/Skills';
+import JobDetails from './pages/employee/JobDetails';
+import AppliedJobs from './pages/employee/AppliedJobs';
+import SavedJobs from './pages/employee/SavedJobs';
+import Notifications from './pages/employee/Notifications';
+import Messages from './pages/employee/Messages';
+import AccountSettings from './pages/employee/AccountSettings';
 
 // Company pages
 import CompanyDashboard from './pages/company/Dashboard';
 import PostJob from './pages/company/PostJob';
 import CompanyApplicants from './pages/company/Applicants';
+import ReviewApplications from './pages/company/ReviewApplications';
 import CompanyProfile from './pages/company/Profile';
+import CompanyManageJobs from './pages/company/ManageJobs';
+import CompanyInterviews from './pages/company/Interviews';
+import CompanyMessages from './pages/company/Messages';
+import CompanyNotifications from './pages/company/Notifications';
+import CompanyBilling from './pages/company/Billing';
+import CompanySettings from './pages/company/Settings';
 
 // Admin pages
 import AdminDashboard from './pages/admin/Dashboard';
@@ -93,6 +106,54 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="job/:jobId"
+              element={
+                <ProtectedRoute requiredRole="employee">
+                  <JobDetails />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="applied-jobs"
+              element={
+                <ProtectedRoute requiredRole="employee">
+                  <AppliedJobs />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="saved-jobs"
+              element={
+                <ProtectedRoute requiredRole="employee">
+                  <SavedJobs />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="notifications"
+              element={
+                <ProtectedRoute requiredRole="employee">
+                  <Notifications />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="messages"
+              element={
+                <ProtectedRoute requiredRole="employee">
+                  <Messages />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="account-settings"
+              element={
+                <ProtectedRoute requiredRole="employee">
+                  <AccountSettings />
+                </ProtectedRoute>
+              }
+            />
           </Route>
 
           {/* Company routes with separate layout */}
@@ -126,6 +187,62 @@ function App() {
               element={
                 <ProtectedRoute requiredRole="company">
                   <CompanyApplicants />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="review-applications"
+              element={
+                <ProtectedRoute requiredRole="company">
+                  <ReviewApplications />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="manage-jobs"
+              element={
+                <ProtectedRoute requiredRole="company">
+                  <CompanyManageJobs />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="interviews"
+              element={
+                <ProtectedRoute requiredRole="company">
+                  <CompanyInterviews />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="messages"
+              element={
+                <ProtectedRoute requiredRole="company">
+                  <CompanyMessages />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="notifications"
+              element={
+                <ProtectedRoute requiredRole="company">
+                  <CompanyNotifications />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="billing"
+              element={
+                <ProtectedRoute requiredRole="company">
+                  <CompanyBilling />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="settings"
+              element={
+                <ProtectedRoute requiredRole="company">
+                  <CompanySettings />
                 </ProtectedRoute>
               }
             />

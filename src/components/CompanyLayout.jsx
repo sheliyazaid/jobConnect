@@ -1,6 +1,19 @@
 import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { LayoutDashboard, User, Briefcase, LogOut } from 'lucide-react';
+import {
+  LayoutDashboard,
+  User,
+  Briefcase,
+  LogOut,
+  Plus,
+  FileText,
+  Users,
+  Calendar,
+  MessageSquare,
+  Bell,
+  CreditCard,
+  Settings,
+} from 'lucide-react';
 
 const CompanyLayout = () => {
   const { logout, userData } = useAuth();
@@ -33,9 +46,61 @@ const CompanyLayout = () => {
             </Link>
           </div>
 
+          {/* Recruitment Section */}
+          <div className="mb-6">
+            <p className="text-secondary-400 text-xs font-bold uppercase tracking-wider mb-3">Recruitment</p>
+            <Link
+              to="/company/post-job"
+              className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-secondary-800 transition font-medium text-white hover:text-white"
+            >
+              <Plus size={20} />
+              Post Job
+            </Link>
+            <Link
+              to="/company/manage-jobs"
+              className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-secondary-800 transition font-medium text-white hover:text-white"
+            >
+              <Briefcase size={20} />
+              Manage Jobs
+            </Link>
+            <Link
+              to="/company/review-applications"
+              className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-secondary-800 transition font-medium text-white hover:text-white"
+            >
+              <Users size={20} />
+              Review Applicants
+            </Link>
+            <Link
+              to="/company/interviews"
+              className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-secondary-800 transition font-medium text-white hover:text-white"
+            >
+              <Calendar size={20} />
+              Interviews
+            </Link>
+          </div>
+
+          {/* Communication Section */}
+          <div className="mb-6">
+            <p className="text-secondary-400 text-xs font-bold uppercase tracking-wider mb-3">Communication</p>
+            <Link
+              to="/company/messages"
+              className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-secondary-800 transition font-medium text-white hover:text-white"
+            >
+              <MessageSquare size={20} />
+              Messages
+            </Link>
+            <Link
+              to="/company/notifications"
+              className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-secondary-800 transition font-medium text-white hover:text-white"
+            >
+              <Bell size={20} />
+              Notifications
+            </Link>
+          </div>
+
           {/* Management Section */}
           <div className="mb-6">
-            <p className="text-secondary-400 text-xs font-bold uppercase tracking-wider mb-3">Manage</p>
+            <p className="text-secondary-400 text-xs font-bold uppercase tracking-wider mb-3">Management</p>
             <Link
               to="/company/profile"
               className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-secondary-800 transition font-medium text-white hover:text-white"
@@ -44,11 +109,18 @@ const CompanyLayout = () => {
               Company Profile
             </Link>
             <Link
-              to="/company/post-job"
+              to="/company/billing"
               className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-secondary-800 transition font-medium text-white hover:text-white"
             >
-              <Briefcase size={20} />
-              Post Job
+              <CreditCard size={20} />
+              Billing
+            </Link>
+            <Link
+              to="/company/settings"
+              className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-secondary-800 transition font-medium text-white hover:text-white"
+            >
+              <Settings size={20} />
+              Settings
             </Link>
           </div>
         </nav>

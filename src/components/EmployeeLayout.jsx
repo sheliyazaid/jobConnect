@@ -1,10 +1,15 @@
-import { Outlet, Link, useNavigate } from 'react-router-dom';
+import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { LayoutDashboard, Briefcase, User, LogOut, FileText, Award } from 'lucide-react';
+import { LayoutDashboard, Briefcase, User, LogOut, FileText, Award, BookMarked, CheckSquare, Bell, MessageCircle, Settings } from 'lucide-react';
 
 const EmployeeLayout = () => {
   const { logout, userData } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Collapse sidebar to icons on Jobs page
+  const isJobsPage = location.pathname === '/employee/jobs';
+  const sidebarWidth = isJobsPage ? 'w-20' : 'w-72';
 
   const handleLogout = async () => {
     await logout();
@@ -44,11 +49,37 @@ const EmployeeLayout = () => {
               Browse Jobs
             </Link>
             <Link
-              to="/employee/applications"
+              to="/employee/applied-jobs"
               className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-secondary-800 transition font-medium text-white hover:text-white"
             >
-              <FileText size={20} />
-              My Applications
+              <CheckSquare size={20} />
+              Applied Jobs
+            </Link>
+            <Link
+              to="/employee/saved-jobs"
+              className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-secondary-800 transition font-medium text-white hover:text-white"
+            >
+              <BookMarked size={20} />
+              Saved Jobs
+            </Link>
+          </div>
+
+          {/* Updates Section */}
+          <div className="mb-6">
+            <p className="text-secondary-400 text-xs font-bold uppercase tracking-wider mb-3">Updates</p>
+            <Link
+              to="/employee/notifications"
+              className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-secondary-800 transition font-medium text-white hover:text-white"
+            >
+              <Bell size={20} />
+              Notifications
+            </Link>
+            <Link
+              to="/employee/messages"
+              className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-secondary-800 transition font-medium text-white hover:text-white"
+            >
+              <MessageCircle size={20} />
+              Messages
             </Link>
           </div>
 
@@ -68,6 +99,18 @@ const EmployeeLayout = () => {
             >
               <Award size={20} />
               Skills & Experience
+            </Link>
+          </div>
+
+          {/* Settings Section */}
+          <div className="mb-6">
+            <p className="text-secondary-400 text-xs font-bold uppercase tracking-wider mb-3">Settings</p>
+            <Link
+              to="/employee/account-settings"
+              className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-secondary-800 transition font-medium text-white hover:text-white"
+            >
+              <Settings size={20} />
+              Account Settings
             </Link>
           </div>
         </nav>
