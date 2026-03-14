@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { collection, query, where, getDocs, addDoc, updateDoc, doc, Timestamp, orderBy } from 'firebase/firestore';
+import { collection, query, where, getDocs, addDoc, updateDoc, doc, Timestamp, orderBy, getDoc } from 'firebase/firestore';
 import { db } from '../../config/firebase';
 import { useAuth } from '../../contexts/AuthContext';
 import { Send, MessageCircle, Trash2, Clock, User } from 'lucide-react';
@@ -8,6 +8,7 @@ const Messages = () => {
   const { currentUser, userData } = useAuth();
   const [conversations, setConversations] = useState([]);
   const [selectedConversation, setSelectedConversation] = useState(null);
+  const [conversationParticipants, setConversationParticipants] = useState({});
   const [messages, setMessages] = useState([]);
   const [messageText, setMessageText] = useState('');
   const [loading, setLoading] = useState(true);
@@ -41,6 +42,7 @@ const Messages = () => {
         if (conversationsList.length > 0 && !selectedConversation) {
           setSelectedConversation(conversationsList[0]);
           fetchMessages(conversationsList[0].id);
+          fetchParticipantName(conversationsList[0].id);
         }
       } catch (error) {
         console.error('Error fetching conversations:', error);
@@ -108,6 +110,7 @@ const Messages = () => {
   const handleSelectConversation = (conversation) => {
     setSelectedConversation(conversation);
     fetchMessages(conversation.id);
+    fetchParticipantName(conversation.id);
   };
 
   const handleDeleteConversation = async (conversationId) => {
@@ -160,7 +163,38 @@ const Messages = () => {
 
   const getOtherParticipant = (conversation) => {
     const otherUserId = conversation.participants.find(id => id !== currentUser.uid);
+
+    // Check if we already have the participant's data cached
+    if (conversationParticipants[otherUserId]) {
+      return conversationParticipants[otherUserId];
+    }
+
     return conversation.otherParticipantName || 'Unknown';
+  };
+
+  // Fetch other participant's display name
+  const fetchParticipantName = async (conversationId) => {
+    try {
+      const conversation = conversations.find(c => c.id === conversationId);
+      if (!conversation) return;
+
+      const otherUserId = conversation.participants.find(id => id !== currentUser.uid);
+      if (!otherUserId || conversationParticipants[otherUserId]) return;
+
+      const userDoc = await getDoc(doc(db, 'users', otherUserId));
+      if (userDoc.exists()) {
+        const data = userDoc.data();
+        // Show company name for companies, employee name for employees
+        const displayName = data.companyName || `${data.firstName || ''} ${data.lastName || ''}`.trim() || 'Unknown';
+
+        setConversationParticipants(prev => ({
+          ...prev,
+          [otherUserId]: displayName
+        }));
+      }
+    } catch (error) {
+      console.error('Error fetching participant name:', error);
+    }
   };
 
   if (loading) {
@@ -174,48 +208,46 @@ const Messages = () => {
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
-      <div className="mb-6">
-        <h1 className="text-4xl font-bold text-secondary-900 mb-2">
-          Messages 💬
-        </h1>
-        <p className="text-secondary-600 text-lg">Communicate with employers and recruiters</p>
+      <div className="mb-6 pb-6 border-b border-secondary-200">
+        <h1 className="text-3xl font-bold text-secondary-900">Messages</h1>
+        <p className="text-secondary-600 text-sm mt-2">Stay connected with employers and candidates</p>
       </div>
 
       {/* Messages Container */}
       <div className="flex gap-6 flex-grow min-h-0">
         {/* Conversations List */}
-        <div className="w-80 card bg-white overflow-y-auto flex flex-col">
-          <div className="p-4 border-b border-secondary-200">
+        <div className="w-80 bg-white border border-secondary-200 rounded-lg overflow-y-auto flex flex-col">
+          <div className="p-5 border-b border-secondary-200 bg-secondary-50">
             <h2 className="text-lg font-bold text-secondary-900">Conversations</h2>
-            <p className="text-secondary-600 text-sm">{conversations.length} active</p>
+            <p className="text-secondary-600 text-xs mt-1">{conversations.length} active</p>
           </div>
 
           {conversations.length === 0 ? (
             <div className="flex-grow flex items-center justify-center">
-              <div className="text-center p-4">
+              <div className="text-center p-6">
                 <MessageCircle size={40} className="mx-auto text-secondary-300 mb-3" />
                 <p className="text-secondary-600 font-medium">No conversations yet</p>
-                <p className="text-secondary-500 text-sm">Messages from employers will appear here</p>
+                <p className="text-secondary-500 text-xs mt-1">Messages will appear here</p>
               </div>
             </div>
           ) : (
-            <div className="flex-grow overflow-y-auto space-y-1 p-2">
+            <div className="flex-grow overflow-y-auto space-y-1 p-3">
               {conversations.map((conversation) => (
                 <button
                   key={conversation.id}
                   onClick={() => handleSelectConversation(conversation)}
-                  className={`w-full text-left p-3 rounded-lg transition duration-200 ${
+                  className={`w-full text-left p-3.5 rounded-lg transition duration-200 ${
                     selectedConversation?.id === conversation.id
                       ? 'bg-primary-100 border-2 border-primary-600'
-                      : 'hover:bg-secondary-50'
+                      : 'hover:bg-secondary-50 border-2 border-transparent'
                   }`}
                 >
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex-grow min-w-0">
-                      <p className="font-semibold text-secondary-900 truncate">
+                      <p className="font-semibold text-secondary-900 truncate text-sm">
                         {getOtherParticipant(conversation)}
                       </p>
-                      <p className="text-secondary-600 text-sm truncate">
+                      <p className="text-secondary-600 text-xs truncate mt-1">
                         {conversation.lastMessage || 'No messages yet'}
                       </p>
                       <p className="text-secondary-500 text-xs mt-1">
@@ -228,9 +260,9 @@ const Messages = () => {
                         handleDeleteConversation(conversation.id);
                       }}
                       disabled={deletingConversationId === conversation.id}
-                      className="p-1 hover:bg-red-100 rounded transition text-red-600"
+                      className="p-1.5 hover:bg-red-100 rounded transition text-red-600 flex-shrink-0"
                     >
-                      <Trash2 size={16} />
+                      <Trash2 size={14} />
                     </button>
                   </div>
                 </button>
@@ -241,26 +273,25 @@ const Messages = () => {
 
         {/* Chat Area */}
         {selectedConversation ? (
-          <div className="flex-grow card bg-white flex flex-col">
-            {/* Chat Header */}
-            <div className="p-4 border-b border-secondary-200 flex items-center justify-between">
-              <div>
-                <h3 className="text-lg font-bold text-secondary-900 flex items-center gap-2">
-                  <User size={20} className="text-primary-600" />
-                  {getOtherParticipant(selectedConversation)}
-                </h3>
-                <p className="text-secondary-600 text-sm">Click to view details</p>
-              </div>
+          <div className="flex-grow bg-white border border-secondary-200 rounded-lg flex flex-col">
+            {/* Chat Header - Professional */}
+            <div className="p-6 border-b border-secondary-200 bg-gradient-to-r from-primary-50 to-primary-100 rounded-t-lg">
+              <h2 className="text-2xl font-bold text-secondary-900">
+                {getOtherParticipant(selectedConversation)}
+              </h2>
+              {selectedConversation.jobTitle && (
+                <p className="text-secondary-600 text-sm mt-2">Regarding: <span className="font-medium">{selectedConversation.jobTitle}</span></p>
+              )}
             </div>
 
             {/* Messages Display */}
-            <div className="flex-grow overflow-y-auto p-4 space-y-4">
+            <div className="flex-grow overflow-y-auto p-5 space-y-4">
               {messages.length === 0 ? (
                 <div className="flex items-center justify-center h-full">
                   <div className="text-center">
                     <MessageCircle size={40} className="mx-auto text-secondary-300 mb-3" />
                     <p className="text-secondary-600 font-medium">No messages yet</p>
-                    <p className="text-secondary-500 text-sm">Start a conversation below</p>
+                    <p className="text-secondary-500 text-xs mt-1">Start a conversation below</p>
                   </div>
                 </div>
               ) : (
@@ -272,15 +303,15 @@ const Messages = () => {
                     }`}
                   >
                     <div
-                      className={`max-w-xs px-4 py-2 rounded-lg ${
+                      className={`max-w-xs px-4 py-2.5 rounded-lg ${
                         message.senderId === currentUser.uid
-                          ? 'bg-primary-600 text-white'
-                          : 'bg-secondary-100 text-secondary-900'
+                          ? 'bg-primary-600 text-white rounded-br-none'
+                          : 'bg-secondary-100 text-secondary-900 rounded-bl-none'
                       }`}
                     >
-                      <p className="text-sm">{message.text}</p>
+                      <p className="text-sm leading-relaxed">{message.text}</p>
                       <p
-                        className={`text-xs mt-1 ${
+                        className={`text-xs mt-1.5 ${
                           message.senderId === currentUser.uid
                             ? 'text-primary-100'
                             : 'text-secondary-500'
@@ -295,19 +326,19 @@ const Messages = () => {
             </div>
 
             {/* Message Input */}
-            <div className="p-4 border-t border-secondary-200">
+            <div className="p-5 border-t border-secondary-200 bg-secondary-50 rounded-b-lg">
               <form onSubmit={handleSendMessage} className="flex gap-3">
                 <input
                   type="text"
                   value={messageText}
                   onChange={(e) => setMessageText(e.target.value)}
-                  placeholder="Type a message..."
-                  className="flex-grow px-4 py-2.5 border-2 border-secondary-200 rounded-lg focus:outline-none focus:border-primary-600 text-secondary-900"
+                  placeholder="Type your message..."
+                  className="flex-grow px-4 py-2.5 border-2 border-secondary-300 rounded-lg focus:outline-none focus:border-primary-600 text-secondary-900 text-sm bg-white"
                 />
                 <button
                   type="submit"
                   disabled={sending || !messageText.trim()}
-                  className="btn-primary flex items-center gap-2"
+                  className="btn-primary flex items-center gap-2 px-4 py-2.5 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <Send size={18} />
                   {sending ? 'Sending...' : 'Send'}
@@ -316,14 +347,14 @@ const Messages = () => {
             </div>
           </div>
         ) : (
-          <div className="flex-grow card bg-white flex items-center justify-center">
+          <div className="flex-grow bg-white border border-secondary-200 rounded-lg flex items-center justify-center">
             <div className="text-center">
               <MessageCircle size={48} className="mx-auto text-secondary-300 mb-4" />
               <p className="text-secondary-600 font-semibold text-lg">Select a conversation</p>
               <p className="text-secondary-500 text-sm mt-2">
                 {conversations.length === 0
-                  ? 'No conversations yet. Wait for employers to contact you'
-                  : 'Select a conversation from the list to start messaging'}
+                  ? 'No conversations yet'
+                  : 'Choose a conversation from the list to start messaging'}
               </p>
             </div>
           </div>

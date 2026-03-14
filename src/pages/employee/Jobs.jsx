@@ -3,7 +3,7 @@ import { collection, query, where, getDocs, doc, getDoc, orderBy, limit, startAf
 import { db } from '../../config/firebase';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { Briefcase, Search, X, Heart, CheckCircle, ChevronDown } from 'lucide-react';
+import { Briefcase, Search, X, Heart, CheckCircle, ChevronDown, MapPin, DollarSign } from 'lucide-react';
 
 const EmployeeJobs = () => {
   const { currentUser } = useAuth();
@@ -381,9 +381,9 @@ const EmployeeJobs = () => {
 
   return (
     <div className="max-w-7xl mx-auto">
-      {/* Compact Search Bar */}
-      <div className="mb-6">
-        <div className="flex gap-2 items-center flex-wrap">
+      {/* Search Bar */}
+      <div className="mb-6 space-y-4">
+        <div className="flex gap-3 items-center">
           {/* Job Search */}
           <div className="flex-1 min-w-64">
             <div className="relative">
@@ -393,53 +393,58 @@ const EmployeeJobs = () => {
                 placeholder="Job title, skills, company..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-8 pr-4 py-2 border border-secondary-200 rounded-lg focus:outline-none focus:border-secondary-900 text-sm text-secondary-900"
+                className="w-full pl-8 pr-4 py-2.5 border border-secondary-200 rounded-lg focus:outline-none focus:border-primary-600 text-sm text-secondary-900 bg-white"
               />
             </div>
           </div>
 
           {/* Location Input */}
-          <div className="w-40">
+          <div className="w-48">
             <input
               type="text"
               placeholder="Location"
               value={selectedLocation}
               onChange={(e) => setSelectedLocation(e.target.value)}
-              className="w-full px-4 py-2 border border-secondary-200 rounded-lg focus:outline-none focus:border-secondary-900 text-sm text-secondary-900"
+              className="w-full px-4 py-2.5 border border-secondary-200 rounded-lg focus:outline-none focus:border-primary-600 text-sm text-secondary-900 bg-white"
             />
           </div>
 
           {/* Sort Dropdown */}
-          <div className="relative">
+          <div className="relative w-44">
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="px-3 py-2 border border-secondary-200 rounded-lg focus:outline-none focus:border-secondary-900 text-sm bg-white text-secondary-900 appearance-none pr-8"
+              className="w-full px-3 py-2.5 border border-secondary-200 rounded-lg focus:outline-none focus:border-primary-600 text-sm bg-white text-secondary-900 appearance-none pr-8"
             >
               <option value="relevance">Most Relevant</option>
               <option value="newest">Newest</option>
-              <option value="salary-high">Salary: High</option>
-              <option value="salary-low">Salary: Low</option>
+              <option value="salary-high">Salary: High to Low</option>
+              <option value="salary-low">Salary: Low to High</option>
             </select>
-            <ChevronDown size={16} className="absolute right-2 top-2.5 text-secondary-500 pointer-events-none" />
+            <ChevronDown size={16} className="absolute right-2.5 top-3 text-secondary-500 pointer-events-none" />
           </div>
         </div>
 
-        {/* Horizontal Filter Buttons */}
-        <div className="mt-4 flex gap-2 overflow-x-auto pb-2 flex-wrap">
+        {/* Filters Bar */}
+        <div className="flex gap-3 items-center flex-wrap pb-2">
           {/* Job Type Dropdown */}
-          <div className="relative flex-shrink-0">
+          <div className="relative">
             <button
               onClick={() => setOpenJobTypeFilter(!openJobTypeFilter)}
-              className="px-3 py-2 border border-secondary-200 rounded-lg hover:bg-secondary-50 text-sm text-secondary-700 font-medium flex items-center gap-1"
+              className="px-3 py-2 border border-secondary-300 rounded-lg hover:bg-secondary-50 text-sm text-secondary-700 font-medium flex items-center gap-2 transition"
             >
-              Job Type {selectedJobTypes.length > 0 && `(${selectedJobTypes.length})`}
+              <span>Job Type</span>
+              {selectedJobTypes.length > 0 && (
+                <span className="bg-primary-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                  {selectedJobTypes.length}
+                </span>
+              )}
               <ChevronDown size={14} className={`transition ${openJobTypeFilter ? 'rotate-180' : ''}`} />
             </button>
             {openJobTypeFilter && (
-              <div className="absolute top-10 left-0 bg-white border border-secondary-200 rounded-lg shadow-lg p-2 z-20 min-w-40">
+              <div className="absolute top-10 left-0 bg-white border border-secondary-200 rounded-lg shadow-lg p-3 z-20 min-w-48">
                 {jobTypeOptions.map(type => (
-                  <label key={type} className="flex items-center gap-2 px-3 py-2 cursor-pointer hover:bg-secondary-50 rounded">
+                  <label key={type} className="flex items-center gap-2 px-3 py-2.5 cursor-pointer hover:bg-secondary-50 rounded">
                     <input
                       type="checkbox"
                       checked={selectedJobTypes.includes(type)}
@@ -459,38 +464,44 @@ const EmployeeJobs = () => {
             )}
           </div>
 
-          {/* Salary Range Input */}
-          <div className="flex gap-1 flex-shrink-0">
+          {/* Salary Range */}
+          <div className="flex gap-2 items-center bg-white border border-secondary-300 rounded-lg px-3 py-2">
+            <span className="text-xs text-secondary-600 font-medium">Salary:</span>
             <input
               type="number"
               placeholder="Min"
               value={salaryMin}
               onChange={(e) => setSalaryMin(e.target.value)}
-              className="w-16 px-2 py-2 border border-secondary-200 rounded-lg focus:outline-none focus:border-secondary-900 text-xs text-secondary-900"
+              className="w-14 px-2 py-1 border border-secondary-200 rounded text-xs focus:outline-none focus:border-primary-600"
             />
-            <span className="py-2 text-xs text-secondary-500">-</span>
+            <span className="text-xs text-secondary-500">-</span>
             <input
               type="number"
               placeholder="Max"
               value={salaryMax}
               onChange={(e) => setSalaryMax(e.target.value)}
-              className="w-16 px-2 py-2 border border-secondary-200 rounded-lg focus:outline-none focus:border-secondary-900 text-xs text-secondary-900"
+              className="w-14 px-2 py-1 border border-secondary-200 rounded text-xs focus:outline-none focus:border-primary-600"
             />
           </div>
 
           {/* Experience Level Dropdown */}
-          <div className="relative flex-shrink-0">
+          <div className="relative">
             <button
               onClick={() => setOpenExpFilter(!openExpFilter)}
-              className="px-3 py-2 border border-secondary-200 rounded-lg hover:bg-secondary-50 text-sm text-secondary-700 font-medium flex items-center gap-1"
+              className="px-3 py-2 border border-secondary-300 rounded-lg hover:bg-secondary-50 text-sm text-secondary-700 font-medium flex items-center gap-2 transition"
             >
-              Experience {selectedExperienceLevels.length > 0 && `(${selectedExperienceLevels.length})`}
+              <span>Experience</span>
+              {selectedExperienceLevels.length > 0 && (
+                <span className="bg-primary-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                  {selectedExperienceLevels.length}
+                </span>
+              )}
               <ChevronDown size={14} className={`transition ${openExpFilter ? 'rotate-180' : ''}`} />
             </button>
             {openExpFilter && (
-              <div className="absolute top-10 left-0 bg-white border border-secondary-200 rounded-lg shadow-lg p-2 z-20 min-w-40">
+              <div className="absolute top-10 left-0 bg-white border border-secondary-200 rounded-lg shadow-lg p-3 z-20 min-w-48">
                 {experienceLevelOptions.map(level => (
-                  <label key={level} className="flex items-center gap-2 px-3 py-2 cursor-pointer hover:bg-secondary-50 rounded">
+                  <label key={level} className="flex items-center gap-2 px-3 py-2.5 cursor-pointer hover:bg-secondary-50 rounded">
                     <input
                       type="checkbox"
                       checked={selectedExperienceLevels.includes(level)}
@@ -514,9 +525,9 @@ const EmployeeJobs = () => {
           {getActiveFilterCount() > 0 && (
             <button
               onClick={clearAllFilters}
-              className="px-3 py-2 text-secondary-600 hover:text-secondary-900 text-sm underline flex-shrink-0"
+              className="px-3 py-2 text-secondary-700 hover:text-secondary-900 text-sm font-medium border border-secondary-300 rounded-lg hover:bg-secondary-50 transition"
             >
-              Clear
+              Clear Filters
             </button>
           )}
         </div>
@@ -553,111 +564,100 @@ const EmployeeJobs = () => {
       </div>
 
       {/* Results Count */}
-      <div className="mb-4 text-xs text-secondary-600">
-        Showing {filteredJobs.length} of {jobs.length} jobs
+      <div className="mb-5 text-sm text-secondary-600 font-medium">
+        {filteredJobs.length === 0 ? 'No jobs found' : `Showing ${filteredJobs.length} of ${jobs.length} jobs`}
       </div>
 
       {/* Job List */}
       {filteredJobs.length === 0 ? (
-        <div className="card bg-white p-12 text-center">
-          <Briefcase size={40} className="mx-auto text-secondary-300 mb-4" />
+        <div className="card bg-white p-12 text-center rounded-xl">
+          <Briefcase size={48} className="mx-auto text-secondary-300 mb-4" />
           <p className="text-secondary-700 font-semibold text-lg">No jobs found</p>
           <p className="text-secondary-600 text-sm mt-2">Try adjusting your search or filters</p>
         </div>
       ) : (
         <>
-          <div className="space-y-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredJobs.map((job) => {
               const matchColor = getMatchColor(job.matchScore);
               const applied = isJobApplied(job.id);
               const saved = isJobSaved(job.id);
 
               return (
-                <div key={job.id} className="border border-secondary-200 rounded-lg hover:shadow-md transition p-4 bg-white">
-                  <div className="flex gap-4 justify-between">
-                    {/* Job Info */}
-                    <div className="flex-1 min-w-0">
-                      {/* Title and Company */}
-                      <h3 className="font-semibold text-secondary-900 text-base">{job.title}</h3>
-                      <p className="text-secondary-600 text-sm">{job.companyName}</p>
+                <div
+                  key={job.id}
+                  className="bg-white rounded-xl shadow-sm hover:shadow-md border border-secondary-200 transition p-5 flex flex-col justify-between"
+                >
+                  <div className="space-y-3">
+                    {/* Job Type */}
+                    <p className="text-xs font-semibold text-secondary-700 uppercase tracking-wide">
+                      {job.type || "Full-time"}
+                    </p>
 
-                      {/* Location, Experience, Salary, Type (1 line) */}
-                      <div className="text-secondary-600 text-xs mt-2 space-y-1">
-                        <p>{job.location} • {job.experienceLevel} • {job.salary || 'Not specified'}</p>
-                        <p>{job.type || 'Full-time'}</p>
+                    {/* Job Title */}
+                    <h3 className="text-lg font-semibold text-secondary-900">
+                      {job.title}
+                    </h3>
+
+                    {/* Company + Location */}
+                    <p className="text-sm text-secondary-600">
+                      {job.companyName || "Company confidential"} •{" "}
+                      {job.location || "Location flexible"}
+                    </p>
+
+                    {/* Skills */}
+                    {job.skills?.length > 0 && (
+                      <div className="flex flex-wrap gap-2 mt-2">
+                        {job.skills.slice(0, 4).map((skill, idx) => (
+                          <span
+                            key={idx}
+                            className="px-2 py-1 rounded-full bg-primary-100 text-secondary-900 text-[11px] font-medium"
+                          >
+                            {skill}
+                          </span>
+                        ))}
                       </div>
+                    )}
+                  </div>
 
-                      {/* Description Preview (1 line) */}
-                      {job.description && (
-                        <p className="text-secondary-600 text-xs mt-2 line-clamp-1">{job.description}</p>
-                      )}
+                  {/* Bottom Section */}
+                  <div className="flex items-center justify-between mt-4">
 
-                      {/* Top Skills */}
-                      {job.skills && job.skills.length > 0 && (
-                        <div className="flex gap-2 mt-2 flex-wrap">
-                          {job.skills.slice(0, 3).map((skill, idx) => (
-                            <span key={idx} className="bg-accent-100 text-accent-900 px-2 py-1 rounded text-xs font-medium">
-                              {skill}
-                            </span>
-                          ))}
-                          {job.skills.length > 3 && (
-                            <span className="text-secondary-500 text-xs px-1">+{job.skills.length - 3}</span>
-                          )}
-                        </div>
-                      )}
-                    </div>
+                  <button
+                          onClick={() => navigate(`/employee/job/${job.id}`)}
+                          className="text-sm font-semibold text-secondary-900 hover:text-secondary-700"
+                        >
+                          View Details
+                        </button>
 
-                    {/* Right Side - Match Score and Actions */}
-                    <div className="flex flex-col gap-2 items-end flex-shrink-0">
-                      {/* Match Score Badge */}
-                      <div className={`${matchColor.bg} ${matchColor.border} border rounded px-3 py-1`}>
-                        <p className={`text-xs font-semibold ${matchColor.text}`}>
-                          {job.matchScore}%
-                        </p>
-                      </div>
-
-                      {/* Posted Date */}
-                      <p className="text-secondary-500 text-xs whitespace-nowrap">
-                        {formatTimeAgo(job.createdAt)}
-                      </p>
-
-                      {/* Action Buttons */}
-                      <div className="flex gap-2 mt-1">
-                        {applied && (
-                          <div className="flex items-center gap-1 text-xs text-green-700 bg-green-50 px-2 py-1 rounded">
-                            <CheckCircle size={12} />
-                            Applied
-                          </div>
-                        )}
-
-                        {/* Apply Button */}
+                    {/* Actions */}
+                    <div className="flex gap-2">
+                      {!applied && (
                         <button
                           onClick={() => navigate(`/employee/job/${job.id}`)}
-                          className="btn-primary text-xs px-3 py-1.5 whitespace-nowrap"
+                          className="btn-primary text-xs px-3 py-1.5 rounded-lg"
                         >
                           Apply
                         </button>
+                      )}
 
-                        {/* Save Button */}
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            // Save/unsave logic would go here
-                          }}
-                          className={`p-1.5 rounded border ${saved ? 'bg-red-50 border-red-200 text-red-600' : 'border-secondary-200 text-secondary-600 hover:bg-secondary-50'} transition`}
-                          title={saved ? 'Remove from saved' : 'Save job'}
-                        >
-                          <Heart size={14} fill={saved ? 'currentColor' : 'none'} />
-                        </button>
+                      {applied && (
+                        <span className="text-green-700 text-xs font-medium">
+                          Applied
+                        </span>
+                      )}
 
-                        {/* View Details */}
-                        <button
-                          onClick={() => navigate(`/employee/job/${job.id}`)}
-                          className="text-secondary-600 hover:text-secondary-900 text-xs underline whitespace-nowrap"
-                        >
-                          View
-                        </button>
-                      </div>
+                      {/* <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                        }}
+                        className={`p-1.5 rounded-lg border transition ${saved
+                            ? "bg-red-50 border-red-200 text-red-600"
+                            : "border-secondary-300 text-secondary-600 hover:bg-secondary-50"
+                          }`}
+                      >
+                        <Heart size={14} fill={saved ? "currentColor" : "none"} />
+                      </button> */}
                     </div>
                   </div>
                 </div>

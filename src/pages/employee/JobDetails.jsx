@@ -196,99 +196,118 @@ const JobDetails = () => {
   }
 
   return (
-    <div>
+    <div className="max-w-6xl mx-auto">
       {/* Back Button */}
       <button
         onClick={() => navigate('/employee/jobs')}
-        className="flex items-center gap-2 text-accent-600 hover:text-accent-700 font-semibold mb-6"
+        className="flex items-center gap-2 text-primary-600 hover:text-primary-700 font-semibold mb-8 text-sm"
       >
-        <ArrowLeft size={20} />
+        <ArrowLeft size={18} />
         Back to Jobs
       </button>
 
-      {/* Header Section */}
-      <div className="card bg-white mb-6">
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex-1">
-            <div className="mb-4">
-              <h1 className="text-4xl font-bold text-secondary-900">{job.title}</h1>
-              <p className="text-secondary-600 text-xl mt-2">{job.companyName}</p>
+      {/* Main Content Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Left Column - Job Details */}
+        <div className="lg:col-span-2 space-y-6">
+          {/* Header Card */}
+          <div className="bg-white border border-secondary-200 rounded-lg p-8">
+            <div className="mb-6">
+              <h1 className="text-3xl font-bold text-secondary-900 mb-2">{job.title}</h1>
+              <p className="text-secondary-600 text-lg font-medium">{job.companyName}</p>
             </div>
 
-            <div className="flex flex-wrap gap-6 mb-6">
+            {/* Job Meta - Horizontal Layout */}
+            <div className="flex flex-wrap gap-6 text-secondary-700 mb-8 pb-8 border-b border-secondary-200">
               {job.location && (
-                <div className="flex items-center gap-2 text-secondary-700">
-                  <MapPin size={20} className="text-accent-600" />
-                  <span>{job.location}</span>
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-primary-50 rounded-lg flex items-center justify-center">
+                    <MapPin size={18} className="text-primary-600" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-secondary-600">Location</p>
+                    <p className="font-medium text-secondary-900">{job.location}</p>
+                  </div>
                 </div>
               )}
               {job.type && (
-                <div className="flex items-center gap-2 text-secondary-700">
-                  <Briefcase size={20} className="text-accent-600" />
-                  <span className="capitalize">{job.type}</span>
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
+                    <Briefcase size={18} className="text-blue-600" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-secondary-600">Type</p>
+                    <p className="font-medium text-secondary-900 capitalize">{job.type}</p>
+                  </div>
                 </div>
               )}
               {job.salary && (
-                <div className="flex items-center gap-2 text-secondary-700">
-                  <DollarSign size={20} className="text-accent-600" />
-                  <span>{job.salary}</span>
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-green-50 rounded-lg flex items-center justify-center">
+                    <DollarSign size={18} className="text-green-600" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-secondary-600">Salary</p>
+                    <p className="font-medium text-secondary-900">{job.salary}</p>
+                  </div>
                 </div>
               )}
               {job.createdAt && (
-                <div className="flex items-center gap-2 text-secondary-700">
-                  <Clock size={20} className="text-accent-600" />
-                  <span>Posted {new Date(job.createdAt.toDate()).toLocaleDateString()}</span>
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-purple-50 rounded-lg flex items-center justify-center">
+                    <Clock size={18} className="text-purple-600" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-secondary-600">Posted</p>
+                    <p className="font-medium text-secondary-900">{new Date(job.createdAt.toDate()).toLocaleDateString()}</p>
+                  </div>
                 </div>
               )}
             </div>
+
+            {/* Action Buttons */}
+            <div className="flex gap-3">
+              <button
+                onClick={handleApply}
+                disabled={applying || hasApplied}
+                className={`flex-1 px-6 py-3 rounded-lg font-semibold transition text-sm ${
+                  hasApplied
+                    ? 'bg-secondary-200 text-secondary-600 cursor-not-allowed'
+                    : 'btn-primary'
+                }`}
+              >
+                {applying ? 'Applying...' : hasApplied ? 'Already Applied' : 'Apply Now'}
+              </button>
+              <button
+                onClick={handleSaveJob}
+                disabled={savingJob}
+                className={`px-6 py-3 rounded-lg font-semibold transition border-2 flex items-center justify-center gap-2 text-sm ${
+                  isSaved
+                    ? 'bg-red-50 border-red-200 text-red-700'
+                    : 'bg-white border-secondary-300 text-secondary-700 hover:border-secondary-400'
+                }`}
+              >
+                <BookMarked size={18} />
+                {savingJob ? 'Saving...' : isSaved ? 'Saved' : 'Save'}
+              </button>
+            </div>
           </div>
 
-          <div className="flex flex-col gap-3 whitespace-nowrap">
-            <button
-              onClick={handleApply}
-              disabled={applying || hasApplied}
-              className={`px-6 py-3 rounded-lg font-semibold transition ${
-                hasApplied
-                  ? 'bg-secondary-200 text-secondary-600 cursor-not-allowed'
-                  : 'btn-primary'
-              }`}
-            >
-              {applying ? 'Applying...' : hasApplied ? 'Applied' : 'Apply Now'}
-            </button>
-            <button
-              onClick={handleSaveJob}
-              disabled={savingJob}
-              className={`px-6 py-3 rounded-lg font-semibold transition border-2 flex items-center justify-center gap-2 ${
-                isSaved
-                  ? 'bg-accent-100 border-accent-300 text-accent-900'
-                  : 'bg-white border-secondary-300 text-secondary-700 hover:border-secondary-400'
-              }`}
-            >
-              <BookMarked size={18} />
-              {savingJob ? 'Saving...' : isSaved ? 'Saved' : 'Save Job'}
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Main Content */}
-        <div className="lg:col-span-2 space-y-6">
-          {/* Job Description */}
-          <div className="card bg-white">
-            <h2 className="text-2xl font-bold text-secondary-900 mb-4">Job Description</h2>
-            <p className="text-secondary-700 whitespace-pre-wrap leading-relaxed">{job.description}</p>
+          {/* Description */}
+          <div className="bg-white border border-secondary-200 rounded-lg p-8">
+            <h2 className="text-xl font-bold text-secondary-900 mb-5">Job Description</h2>
+            <p className="text-secondary-700 leading-relaxed whitespace-pre-wrap text-sm">{job.description}</p>
           </div>
 
           {/* Required Skills */}
           {job.skills && job.skills.length > 0 && (
-            <div className="card bg-white">
-              <h2 className="text-2xl font-bold text-secondary-900 mb-4">Required Skills</h2>
+            <div className="bg-white border border-secondary-200 rounded-lg p-8">
+              <h2 className="text-xl font-bold text-secondary-900 mb-5">Required Skills</h2>
               <div className="flex flex-wrap gap-3">
                 {job.skills.map((skill, idx) => (
                   <span
                     key={idx}
-                    className="bg-accent-100 text-accent-900 px-4 py-2 rounded-full font-medium"
+                    className="bg-primary-50 text-primary-700 px-4 py-2.5 rounded-full font-medium text-sm border border-primary-100"
                   >
                     {skill}
                   </span>
@@ -298,40 +317,40 @@ const JobDetails = () => {
           )}
         </div>
 
-        {/* Sidebar - Company Information */}
+        {/* Right Column - About Company */}
         <div className="lg:col-span-1">
-          <div className="card bg-white sticky top-6">
-            <h2 className="text-xl font-bold text-secondary-900 mb-4">About Company</h2>
+          <div className="bg-white border border-secondary-200 rounded-lg p-8 sticky top-6">
+            <h2 className="text-xl font-bold text-secondary-900 mb-6">About Company</h2>
 
             {company && (
-              <div className="space-y-4">
+              <div className="space-y-5">
                 <div>
-                  <p className="text-secondary-600 font-medium text-sm mb-1">Company Name</p>
-                  <p className="text-secondary-900 font-bold text-lg">{company.companyName}</p>
+                  <p className="text-secondary-600 font-medium text-xs mb-2">Company Name</p>
+                  <p className="text-secondary-900 font-bold text-sm">{company.companyName}</p>
                 </div>
 
                 {company.industryType && (
-                  <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
-                    <p className="text-blue-600 font-medium text-sm mb-1">Industry</p>
-                    <p className="text-secondary-900 font-semibold">{company.industryType}</p>
+                  <div className="p-4 bg-blue-50 rounded-lg border border-blue-100">
+                    <p className="text-blue-700 font-medium text-xs mb-1">Industry</p>
+                    <p className="text-secondary-900 font-semibold text-sm">{company.industryType}</p>
                   </div>
                 )}
 
                 {company.companySize && (
-                  <div className="p-3 bg-green-50 rounded-lg border border-green-200">
-                    <p className="text-green-600 font-medium text-sm mb-1">Company Size</p>
-                    <p className="text-secondary-900 font-semibold">{company.companySize}</p>
+                  <div className="p-4 bg-green-50 rounded-lg border border-green-100">
+                    <p className="text-green-700 font-medium text-xs mb-1">Company Size</p>
+                    <p className="text-secondary-900 font-semibold text-sm">{company.companySize}</p>
                   </div>
                 )}
 
                 {company.website && (
-                  <div className="p-3 bg-purple-50 rounded-lg border border-purple-200">
-                    <p className="text-purple-600 font-medium text-sm mb-1">Website</p>
+                  <div className="p-4 bg-purple-50 rounded-lg border border-purple-100">
+                    <p className="text-purple-700 font-medium text-xs mb-1">Website</p>
                     <a
                       href={company.website}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-secondary-900 font-semibold hover:text-accent-600 break-all"
+                      className="text-secondary-900 font-semibold text-sm hover:text-primary-600 break-all"
                     >
                       {company.website}
                     </a>
@@ -339,11 +358,11 @@ const JobDetails = () => {
                 )}
 
                 {company.email && (
-                  <div className="p-3 bg-orange-50 rounded-lg border border-orange-200">
-                    <p className="text-orange-600 font-medium text-sm mb-1">Contact Email</p>
+                  <div className="p-4 bg-orange-50 rounded-lg border border-orange-100">
+                    <p className="text-orange-700 font-medium text-xs mb-1">Email</p>
                     <a
                       href={`mailto:${company.email}`}
-                      className="text-secondary-900 font-semibold hover:text-accent-600 break-all"
+                      className="text-secondary-900 font-semibold text-sm hover:text-primary-600 break-all"
                     >
                       {company.email}
                     </a>
@@ -351,11 +370,11 @@ const JobDetails = () => {
                 )}
 
                 {company.phone && (
-                  <div className="p-3 bg-red-50 rounded-lg border border-red-200">
-                    <p className="text-red-600 font-medium text-sm mb-1">Contact Phone</p>
+                  <div className="p-4 bg-red-50 rounded-lg border border-red-100">
+                    <p className="text-red-700 font-medium text-xs mb-1">Phone</p>
                     <a
                       href={`tel:${company.phone}`}
-                      className="text-secondary-900 font-semibold hover:text-accent-600"
+                      className="text-secondary-900 font-semibold text-sm hover:text-primary-600"
                     >
                       {company.phone}
                     </a>

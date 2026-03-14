@@ -49,6 +49,33 @@ import ManageEmployees from './pages/admin/ManageEmployees';
 import Reports from './pages/admin/Reports';
 import AdminContacts from './pages/admin/Contacts';
 
+// Footer pages
+import Privacy from './pages/Privacy';
+import Accessibility from './pages/Accessibility';
+import TalentSolutions from './pages/TalentSolutions';
+import Policies from './pages/Policies';
+import Careers from './pages/Careers';
+import MarketingSolutions from './pages/MarketingSolutions';
+import AdChoices from './pages/AdChoices';
+import Advertising from './pages/Advertising';
+import SalesSolutions from './pages/SalesSolutions';
+import Mobile from './pages/Mobile';
+import SmallBusiness from './pages/SmallBusiness';
+import SafetyCenter from './pages/SafetyCenter';
+import HelpCenter from './pages/HelpCenter';
+import RecommendationTransparency from './pages/RecommendationTransparency';
+import ProfessionalCommunity from './pages/ProfessionalCommunity';
+
+// New pages
+import Features from './pages/Features';
+import Pricing from './pages/Pricing';
+import Blog from './pages/Blog';
+import ContactUs from './pages/ContactUs';
+import TermsAndConditions from './pages/TermsAndConditions';
+import FAQ from './pages/FAQ';
+import Testimonials from './pages/Testimonials';
+import Events from './pages/Events';
+
 function App() {
   return (
     <BrowserRouter>
@@ -62,6 +89,31 @@ function App() {
             <Route path="companies" element={<CompaniesPreview />} />
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
+            {/* Footer pages */}
+            <Route path="privacy" element={<Privacy />} />
+            <Route path="accessibility" element={<Accessibility />} />
+            <Route path="talent-solutions" element={<TalentSolutions />} />
+            <Route path="policies" element={<Policies />} />
+            <Route path="careers" element={<Careers />} />
+            <Route path="marketing-solutions" element={<MarketingSolutions />} />
+            <Route path="ad-choices" element={<AdChoices />} />
+            <Route path="advertising" element={<Advertising />} />
+            <Route path="sales-solutions" element={<SalesSolutions />} />
+            <Route path="mobile" element={<Mobile />} />
+            <Route path="small-business" element={<SmallBusiness />} />
+            <Route path="safety-center" element={<SafetyCenter />} />
+            <Route path="help-center" element={<HelpCenter />} />
+            <Route path="recommendation-transparency" element={<RecommendationTransparency />} />
+            <Route path="professional-community" element={<ProfessionalCommunity />} />
+            {/* New pages */}
+            <Route path="features" element={<Features />} />
+            <Route path="pricing" element={<Pricing />} />
+            <Route path="blog" element={<Blog />} />
+            <Route path="contact-us" element={<ContactUs />} />
+            <Route path="terms-and-conditions" element={<TermsAndConditions />} />
+            <Route path="faqs" element={<FAQ />} />
+            <Route path="testimonials" element={<Testimonials />} />
+            <Route path="events" element={<Events />} />
           </Route>
 
           {/* Employee routes with separate layout */}

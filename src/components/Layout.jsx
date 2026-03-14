@@ -1,5 +1,6 @@
 import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import Footer from './Footer';
 
 const Layout = () => {
   const { currentUser, userData, logout } = useAuth();
@@ -11,70 +12,88 @@ const Layout = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <nav className="bg-white shadow-md">
+    <div className="min-h-screen flex flex-col bg-primary-100">
+      {/* Top navigation */}
+      <nav className="sticky top-0 z-40 bg-secondary-900/95 backdrop-blur shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <div className="flex items-center">
-              <Link to="/" className="text-2xl font-bold text-primary-600">
-                JobConnect
-              </Link>
-            </div>
-            <div className="flex items-center space-x-4">
-              {!currentUser ? (
+          <div className="flex h-16 md:h-20 items-center justify-between gap-4">
+            {/* Brand */}
+            <Link to="/" className="flex items-center gap-2">
+              <div className="w-9 h-9 rounded-xl bg-primary-100 flex items-center justify-center text-xs font-bold text-secondary-900 shadow-sm">
+                JC
+              </div>
+              <div className="flex flex-col leading-tight">
+                <span className="text-lg md:text-xl font-bold text-white">JobConnect</span>
+                <span className="text-[10px] md:text-[11px] text-secondary-300 uppercase tracking-wide">
+                  Jobs • Talent • Hiring
+                </span>
+              </div>
+            </Link>
+
+            {/* Public navigation links */}
+            <div className="hidden md:flex items-center gap-1 bg-secondary-800/60 rounded-full px-2 py-1 border border-secondary-700">
+              {!currentUser && (
                 <>
                   <Link
                     to="/jobs"
-                    className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium"
+                    className="px-3 py-1.5 rounded-full text-xs font-semibold text-secondary-100 hover:text-white hover:bg-secondary-700 transition"
                   >
                     Browse Jobs
                   </Link>
                   <Link
                     to="/companies"
-                    className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium"
+                    className="px-3 py-1.5 rounded-full text-xs font-semibold text-secondary-100 hover:text-white hover:bg-secondary-700 transition"
                   >
                     Companies
                   </Link>
                   <Link
                     to="/about"
-                    className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium"
+                    className="px-3 py-1.5 rounded-full text-xs font-semibold text-secondary-100 hover:text-white hover:bg-secondary-700 transition"
                   >
                     About
                   </Link>
+                </>
+              )}
+            </div>
+
+            {/* Auth / dashboard actions */}
+            <div className="flex items-center gap-2">
+              {!currentUser ? (
+                <>
                   <Link
                     to="/login"
-                    className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium"
+                    className="hidden sm:inline-flex px-3 py-1.5 rounded-full text-xs font-semibold text-secondary-100 hover:text-white hover:bg-secondary-700 transition"
                   >
                     Login
                   </Link>
                   <Link
                     to="/register"
-                    className="bg-primary-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-primary-700"
+                    className="inline-flex px-4 py-2 rounded-full text-xs md:text-sm font-semibold bg-accent-500 text-white hover:bg-accent-600 hover:text-white transition shadow-sm"
                   >
-                    Register
+                    Get Started
                   </Link>
                 </>
               ) : (
-                <>
+                <div className="flex items-center gap-2">
                   {userData?.role === 'admin' && (
                     <Link
                       to="/admin/dashboard"
-                      className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium"
+                      className="px-3 py-1.5 rounded-full text-xs font-semibold text-secondary-100 hover:text-white hover:bg-secondary-700 transition"
                     >
-                      Admin Dashboard
+                      Admin
                     </Link>
                   )}
                   {userData?.role === 'company' && (
                     <>
                       <Link
                         to="/company/dashboard"
-                        className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium"
+                        className="px-3 py-1.5 rounded-full text-xs font-semibold text-secondary-100 hover:text-white hover:bg-secondary-700 transition"
                       >
-                        Dashboard
+                        Company
                       </Link>
                       <Link
                         to="/company/post-job"
-                        className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium"
+                        className="hidden sm:inline-flex px-3 py-1.5 rounded-full text-xs font-semibold bg-accent-500 text-white hover:bg-accent-600 transition"
                       >
                         Post Job
                       </Link>
@@ -84,31 +103,25 @@ const Layout = () => {
                     <>
                       <Link
                         to="/employee/dashboard"
-                        className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium"
+                        className="px-3 py-1.5 rounded-full text-xs font-semibold text-secondary-100 hover:text-white hover:bg-secondary-700 transition"
                       >
                         Dashboard
                       </Link>
                       <Link
                         to="/employee/jobs"
-                        className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium"
+                        className="hidden sm:inline-flex px-3 py-1.5 rounded-full text-xs font-semibold text-secondary-100 hover:text-white hover:bg-secondary-700 transition"
                       >
-                        Browse Jobs
-                      </Link>
-                      <Link
-                        to="/employee/profile"
-                        className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium"
-                      >
-                        Profile
+                        My Jobs
                       </Link>
                     </>
                   )}
                   <button
                     onClick={handleLogout}
-                    className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium"
+                    className="px-3 py-1.5 rounded-full text-xs font-semibold text-secondary-200 hover:text-white hover:bg-secondary-700 transition"
                   >
                     Logout
                   </button>
-                </>
+                </div>
               )}
             </div>
           </div>
@@ -119,46 +132,7 @@ const Layout = () => {
         <Outlet />
       </main>
 
-      <footer className="bg-gray-800 text-white mt-auto">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div>
-              <h3 className="text-lg font-semibold mb-4">JobConnect</h3>
-              <p className="text-gray-400">
-                Connecting companies with talented job seekers.
-              </p>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
-              <ul className="space-y-2 text-gray-400">
-                <li>
-                  <Link to="/" className="hover:text-white">Home</Link>
-                </li>
-                <li>
-                  <Link to="/about" className="hover:text-white">About</Link>
-                </li>
-                <li>
-                  <Link to="/jobs" className="hover:text-white">Browse Jobs</Link>
-                </li>
-                <li>
-                  <Link to="/companies" className="hover:text-white">Companies</Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Contact</h3>
-              <p className="text-gray-400">
-                Email: info@jobconnect.com
-                <br />
-                Phone: (555) 123-4567
-              </p>
-            </div>
-          </div>
-          <div className="mt-8 pt-8 border-t border-gray-700 text-center text-gray-400">
-            <p>&copy; 2024 JobConnect. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };

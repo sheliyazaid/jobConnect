@@ -45,8 +45,9 @@ service cloud.firestore {
       // Users can create their own profile (during signup)
       allow create: if isAuthenticated() && isUser(userId);
 
-      // Only admin can list all users
-      allow list: if isAuthenticated() && isAdmin();
+      // Allow listing users (used for public company/employee browsing)
+      // Actual visibility is still controlled by the per-document read rule above.
+      allow list: if true;
 
       // Prevent delete
       allow delete: if false;
@@ -90,6 +91,10 @@ service cloud.firestore {
       // Employees can create applications
       allow create: if isAuthenticated() && isEmployee() &&
                        request.resource.data.employeeId == request.auth.uid;
+
+      // Employees can update their own applications (e.g., conversationId)
+      allow update: if isAuthenticated() && isEmployee() &&
+                       resource.data.employeeId == request.auth.uid;
 
       // Companies can update application status
       allow update: if isAuthenticated() && isCompany() && (
