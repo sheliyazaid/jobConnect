@@ -26,6 +26,9 @@ import SavedJobs from './pages/employee/SavedJobs';
 import Notifications from './pages/employee/Notifications';
 import Messages from './pages/employee/Messages';
 import AccountSettings from './pages/employee/AccountSettings';
+import GovernmentJobs from './pages/employee/GovernmentJobs';
+import GovernmentJobDetails from './pages/employee/GovernmentJobDetails';
+import EmployeeGovernmentApplications from './pages/employee/GovernmentApplications';
 
 // Company pages
 import CompanyDashboard from './pages/company/Dashboard';
@@ -48,6 +51,13 @@ import ManageCompanies from './pages/admin/ManageCompanies';
 import ManageEmployees from './pages/admin/ManageEmployees';
 import Reports from './pages/admin/Reports';
 import AdminContacts from './pages/admin/Contacts';
+import PostGovernmentJob from './pages/admin/PostGovernmentJob';
+import ManageGovernmentJobs from './pages/admin/ManageGovernmentJobs';
+import GovernmentApplications from './pages/admin/GovernmentApplications';
+import GovernmentNotifications from './pages/admin/GovernmentNotifications';
+import ExpiredGovernmentJobs from './pages/admin/ExpiredGovernmentJobs';
+import GovernmentJobCategories from './pages/admin/GovernmentJobCategories';
+import GovernmentReports from './pages/admin/GovernmentReports';
 
 // Footer pages
 import Privacy from './pages/Privacy';
@@ -206,6 +216,30 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="government-jobs"
+              element={
+                <ProtectedRoute requiredRole="employee">
+                  <GovernmentJobs />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="government-jobs/:id"
+              element={
+                <ProtectedRoute requiredRole="employee">
+                  <GovernmentJobDetails />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="government-applications"
+              element={
+                <ProtectedRoute requiredRole="employee">
+                  <EmployeeGovernmentApplications />
+                </ProtectedRoute>
+              }
+            />
           </Route>
 
           {/* Company routes with separate layout */}
@@ -355,6 +389,62 @@ function App() {
               element={
                 <ProtectedRoute requiredRole="admin" requireApproval={false}>
                   <AdminContacts />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="post-government-job"
+              element={
+                <ProtectedRoute requiredRole="admin" requireApproval={false}>
+                  <PostGovernmentJob />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="manage-government-jobs"
+              element={
+                <ProtectedRoute requiredRole="admin" requireApproval={false}>
+                  <ManageGovernmentJobs />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="government-applications"
+              element={
+                <ProtectedRoute requiredRole="admin" requireApproval={false}>
+                  <GovernmentApplications />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="government-notifications"
+              element={
+                <ProtectedRoute requiredRole="admin" requireApproval={false}>
+                  <GovernmentNotifications />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="expired-government-jobs"
+              element={
+                <ProtectedRoute requiredRole="admin" requireApproval={false}>
+                  <ExpiredGovernmentJobs />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="government-categories"
+              element={
+                <ProtectedRoute requiredRole="admin" requireApproval={false}>
+                  <GovernmentJobCategories />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="government-reports"
+              element={
+                <ProtectedRoute requiredRole="admin" requireApproval={false}>
+                  <GovernmentReports />
                 </ProtectedRoute>
               }
             />

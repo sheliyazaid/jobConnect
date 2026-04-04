@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
-    <footer className="mt-auto bg-gradient-to-t from-secondary-900 to-secondary-800 text-secondary-100 shadow-inner">
+    <footer className="mt-auto bg-secondary-900 text-secondary-100 shadow-inner">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-10">
         {/* Top band */}
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 border-b border-secondary-700 pb-8">
@@ -24,13 +24,13 @@ const Footer = () => {
             <div className="flex gap-2">
               <Link
                 to="/register"
-                className="px-4 py-2 rounded-full bg-accent-500 text-white text-sm font-semibold hover:bg-accent-600 transition"
+                className="px-4 py-2 rounded-full bg-accent-500 text-white text-sm font-semibold hover:bg-accent-600 transition hover:text-white"
               >
                 Get Started
               </Link>
               <Link
                 to="/contact-us"
-                className="px-4 py-2 rounded-full border border-secondary-500 text-sm font-semibold text-secondary-100 hover:bg-secondary-700 transition"
+                className="px-4 py-2 rounded-full border border-secondary-600 text-sm font-semibold text-secondary-100 hover:bg-secondary-700 transition hover:text-white"
               >
                 Talk to us
               </Link>
@@ -44,22 +44,22 @@ const Footer = () => {
             <h4 className="font-semibold text-white mb-3">Platform</h4>
             <ul className="space-y-2">
               <li>
-                <Link to="/features" className="hover:text-white transition">
+                <Link to="/features" className="text-secondary-300 hover:text-white transition">
                   Features
                 </Link>
               </li>
               <li>
-                <Link to="/pricing" className="hover:text-white transition">
+                <Link to="/pricing" className="text-secondary-300 hover:text-white transition">
                   Pricing
                 </Link>
               </li>
               <li>
-                <Link to="/mobile" className="hover:text-white transition">
+                <Link to="/mobile" className="text-secondary-300 hover:text-white transition">
                   Mobile App
                 </Link>
               </li>
               <li>
-                <Link to="/contact-us" className="hover:text-white transition">
+                <Link to="/contact-us" className="text-secondary-300 hover:text-white transition">
                   Contact Us
                 </Link>
               </li>
@@ -70,22 +70,22 @@ const Footer = () => {
             <h4 className="font-semibold text-white mb-3">Solutions</h4>
             <ul className="space-y-2">
               <li>
-                <Link to="/talent-solutions" className="hover:text-white transition">
+                <Link to="/talent-solutions" className="text-secondary-300 hover:text-white transition">
                   Talent Solutions
                 </Link>
               </li>
               <li>
-                <Link to="/sales-solutions" className="hover:text-white transition">
+                <Link to="/sales-solutions" className="text-secondary-300 hover:text-white transition">
                   Sales Solutions
                 </Link>
               </li>
               <li>
-                <Link to="/marketing-solutions" className="hover:text-white transition">
+                <Link to="/marketing-solutions" className="text-secondary-300 hover:text-white transition">
                   Marketing Solutions
                 </Link>
               </li>
               <li>
-                <Link to="/small-business" className="hover:text-white transition">
+                <Link to="/small-business" className="text-secondary-300 hover:text-white transition">
                   Small Business
                 </Link>
               </li>
@@ -96,22 +96,22 @@ const Footer = () => {
             <h4 className="font-semibold text-white mb-3">Community</h4>
             <ul className="space-y-2">
               <li>
-                <Link to="/professional-community" className="hover:text-white transition">
+                <Link to="/professional-community" className="text-secondary-300 hover:text-white transition">
                   Professional Community
                 </Link>
               </li>
               <li>
-                <Link to="/policies" className="hover:text-white transition">
+                <Link to="/policies" className="text-secondary-300 hover:text-white transition">
                   Community Policies
                 </Link>
               </li>
               <li>
-                <Link to="/blog" className="hover:text-white transition">
+                <Link to="/blog" className="text-secondary-300 hover:text-white transition">
                   Blog
                 </Link>
               </li>
               <li>
-                <Link to="/events" className="hover:text-white transition">
+                <Link to="/events" className="text-secondary-300 hover:text-white transition">
                   Events & Webinars
                 </Link>
               </li>
@@ -122,22 +122,22 @@ const Footer = () => {
             <h4 className="font-semibold text-white mb-3">Support</h4>
             <ul className="space-y-2">
               <li>
-                <Link to="/help-center" className="hover:text-white transition">
+                <Link to="/help-center" className="text-secondary-300 hover:text-white transition">
                   Help Center
                 </Link>
               </li>
               <li>
-                <Link to="/faqs" className="hover:text-white transition">
+                <Link to="/faqs" className="text-secondary-300 hover:text-white transition">
                   FAQs
                 </Link>
               </li>
               <li>
-                <Link to="/accessibility" className="hover:text-white transition">
+                <Link to="/accessibility" className="text-secondary-300 hover:text-white transition">
                   Accessibility
                 </Link>
               </li>
               <li>
-                <Link to="/safety-center" className="hover:text-white transition">
+                <Link to="/safety-center" className="text-secondary-300 hover:text-white transition">
                   Safety Center
                 </Link>
               </li>
@@ -148,22 +148,22 @@ const Footer = () => {
             <h4 className="font-semibold text-white mb-3">Legal</h4>
             <ul className="space-y-2">
               <li>
-                <Link to="/privacy" className="hover:text-white transition">
+                <Link to="/privacy" className="text-secondary-300 hover:text-white transition">
                   Privacy & Terms
                 </Link>
               </li>
               <li>
-                <Link to="/terms-and-conditions" className="hover:text-white transition">
+                <Link to="/terms-and-conditions" className="text-secondary-300 hover:text-white transition">
                   Terms & Conditions
                 </Link>
               </li>
               <li>
-                <Link to="/ad-choices" className="hover:text-white transition">
+                <Link to="/ad-choices" className="text-secondary-300 hover:text-white transition">
                   Ad Choices
                 </Link>
               </li>
               <li>
-                <Link to="/testimonials" className="hover:text-white transition">
+                <Link to="/testimonials" className="text-secondary-300 hover:text-white transition">
                   Testimonials
                 </Link>
               </li>
@@ -174,7 +174,7 @@ const Footer = () => {
         {/* Bottom strip */}
         <div className="border-t border-secondary-700 pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs">
           <p className="text-secondary-300">
-            &copy; 2024 JobConnect. All rights reserved.
+            &copy; 2025 JobConnect. All rights reserved.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
             <Link to="/privacy" className="text-secondary-300 hover:text-white transition">

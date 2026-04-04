@@ -1,6 +1,6 @@
 import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { LayoutDashboard, CheckCircle, BarChart3, Building2, Users, Briefcase, LogOut, Mail } from 'lucide-react';
+import { LayoutDashboard, CheckCircle, BarChart3, Building2, Users, Briefcase, LogOut, Mail, FileText, Eye } from 'lucide-react';
 
 const AdminLayout = () => {
   const { logout } = useAuth();
@@ -88,6 +88,60 @@ const AdminLayout = () => {
             <p className="text-secondary-400 text-xs font-bold uppercase tracking-wider mb-3">Analytics</p>
             <Link
               to="/admin/reports"
+              className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-secondary-800 transition font-medium text-white hover:text-white"
+            >
+              <BarChart3 size={20} />
+              Reports
+            </Link>
+          </div>
+
+          {/* Government Section */}
+          <div className="mb-6">
+            <p className="text-secondary-400 text-xs font-bold uppercase tracking-wider mb-3">Government</p>
+            <Link
+              to="/admin/post-government-job"
+              className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-secondary-800 transition font-medium text-white hover:text-white"
+            >
+              <FileText size={20} />
+              Post Job
+            </Link>
+            <Link
+              to="/admin/manage-government-jobs"
+              className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-secondary-800 transition font-medium text-white hover:text-white"
+            >
+              <Briefcase size={20} />
+              Manage Jobs
+            </Link>
+            <Link
+              to="/admin/government-applications"
+              className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-secondary-800 transition font-medium text-white hover:text-white"
+            >
+              <Eye size={20} />
+              Applications
+            </Link>
+            {/* <Link
+              to="/admin/government-notifications"
+              className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-secondary-800 transition font-medium text-white hover:text-white"
+            >
+              <Mail size={20} />
+              Notifications
+            </Link> */}
+            <Link
+              to="/admin/expired-government-jobs"
+              className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-secondary-800 transition font-medium text-white hover:text-white"
+            >
+              <BarChart3 size={20} />
+              Expired Jobs
+            </Link>
+            <Link
+              to="/admin/government-categories"
+              className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-secondary-800 transition font-medium text-white hover:text-white"
+            >
+              <Briefcase size={20} />
+              Categories
+            </Link>
+            <Link
+              to="/admin/government-reports"
               className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-secondary-800 transition font-medium text-white hover:text-white"
             >
               <BarChart3 size={20} />

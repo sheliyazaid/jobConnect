@@ -213,6 +213,78 @@ service cloud.firestore {
       allow delete: if isAdmin();
     }
 
+    // ==================== GOVERNMENT JOBS COLLECTION ====================
+    match /govJobs/{govJobId} {
+      // Anyone can read government jobs (public listings)
+      allow read: if true;
+
+      // Only admin can create government jobs
+      allow create: if isAdmin();
+
+      // Only admin can update government jobs
+      allow update: if isAdmin();
+
+      // Only admin can delete government jobs
+      allow delete: if isAdmin();
+    }
+
+    // ==================== GOVERNMENT APPLICATIONS COLLECTION ====================
+    match /govApplications/{applicationId} {
+      // Employees can read their own applications
+      allow read: if isAuthenticated() &&
+                     (isUser(resource.data.employeeId) || isAdmin());
+
+      // Employees can create applications
+      allow create: if isAuthenticated() && isEmployee() &&
+                       request.resource.data.employeeId == request.auth.uid;
+
+      // Admin can update all applications (approve/reject)
+      allow update: if isAdmin();
+
+      // Employees can delete their own applications (if not approved/rejected)
+      allow delete: if isAuthenticated() && isEmployee() &&
+                       isUser(resource.data.employeeId);
+
+      // Admin has full access
+      allow read, update, delete: if isAdmin();
+    }
+
+    // ==================== GOVERNMENT NOTIFICATIONS COLLECTION ====================
+    match /govNotifications/{notificationId} {
+      // Employees can read their own notifications
+      allow read: if isAuthenticated() &&
+                     (isUser(resource.data.employeeId) || isAdmin());
+
+      // Only admin can create notifications
+      allow create: if isAdmin();
+
+      // Users can update their own notifications (mark as read)
+      allow update: if isAuthenticated() &&
+                       (isUser(resource.data.employeeId) || isAdmin());
+
+      // Users can delete their own notifications
+      allow delete: if isAuthenticated() &&
+                       (isUser(resource.data.employeeId) || isAdmin());
+
+      // Admin has full access
+      allow read, update, delete: if isAdmin();
+    }
+
+    // ==================== GOVERNMENT CATEGORIES COLLECTION ====================
+    match /govJobCategories/{categoryId} {
+      // Anyone can read categories
+      allow read: if true;
+
+      // Only admin can create categories
+      allow create: if isAdmin();
+
+      // Only admin can update categories
+      allow update: if isAdmin();
+
+      // Only admin can delete categories
+      allow delete: if isAdmin();
+    }
+
     // ==================== DEFAULT DENY ====================
     // Deny all by default
     match /{document=**} {

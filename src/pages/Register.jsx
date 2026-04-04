@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { uploadResumeToCloudinary, uploadToCloudinary } from '../config/cloudinary';
-import { UserPlus, Building2, ChevronRight, ChevronLeft, Plus, X, FileText, Award, DollarSign } from 'lucide-react';
+import { UserPlus, Building2, ChevronRight, ChevronLeft, Plus, X, FileText, Award, DollarSign, Eye, EyeOff } from 'lucide-react';
 
 const Register = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -54,6 +54,8 @@ const Register = () => {
 
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [newEducation, setNewEducation] = useState({ school: '', degree: '', field: '', startDate: '', endDate: '' });
   const [newExperience, setNewExperience] = useState({ company: '', position: '', duration: '', description: '' });
   const [newSkill, setNewSkill] = useState('');
@@ -506,25 +508,43 @@ const Register = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-semibold text-secondary-800 mb-2">Password *</label>
-                      <input
-                        type="password"
-                        name="password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        className="w-full px-4 py-2.5 border border-secondary-100 rounded-lg focus:outline-none focus:border-secondary-900 focus:ring-2 focus:ring-secondary-100 text-secondary-900 placeholder-secondary-500"
-                        placeholder="••••••••"
-                      />
+                      <div className="relative">
+                        <input
+                          type={showPassword ? 'text' : 'password'}
+                          name="password"
+                          value={formData.password}
+                          onChange={handleChange}
+                          className="w-full px-4 py-2.5 border border-secondary-100 rounded-lg focus:outline-none focus:border-secondary-900 focus:ring-2 focus:ring-secondary-100 text-secondary-900 placeholder-secondary-500"
+                          placeholder="••••••••"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword(!showPassword)}
+                          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-secondary-600 hover:text-secondary-900 transition"
+                        >
+                          {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                        </button>
+                      </div>
                     </div>
                     <div>
                       <label className="block text-sm font-semibold text-secondary-800 mb-2">Confirm Password *</label>
-                      <input
-                        type="password"
-                        name="confirmPassword"
-                        value={formData.confirmPassword}
-                        onChange={handleChange}
-                        className="w-full px-4 py-2.5 border border-secondary-100 rounded-lg focus:outline-none focus:border-secondary-900 focus:ring-2 focus:ring-secondary-100 text-secondary-900 placeholder-secondary-500"
-                        placeholder="••••••••"
-                      />
+                      <div className="relative">
+                        <input
+                          type={showConfirmPassword ? 'text' : 'password'}
+                          name="confirmPassword"
+                          value={formData.confirmPassword}
+                          onChange={handleChange}
+                          className="w-full px-4 py-2.5 border border-secondary-100 rounded-lg focus:outline-none focus:border-secondary-900 focus:ring-2 focus:ring-secondary-100 text-secondary-900 placeholder-secondary-500"
+                          placeholder="••••••••"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-secondary-600 hover:text-secondary-900 transition"
+                        >
+                          {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>

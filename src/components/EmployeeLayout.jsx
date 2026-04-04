@@ -1,6 +1,6 @@
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { LayoutDashboard, Briefcase, User, LogOut, FileText, Award, BookMarked, CheckSquare, Bell, MessageCircle, Settings } from 'lucide-react';
+import { LayoutDashboard, Briefcase, User, LogOut, FileText, Award, BookMarked, CheckSquare, Bell, MessageCircle, Settings, Flag } from 'lucide-react';
 
 const EmployeeLayout = () => {
   const { logout, userData } = useAuth();
@@ -61,6 +61,25 @@ const EmployeeLayout = () => {
             >
               <BookMarked size={20} />
               Saved Jobs
+            </Link>
+          </div>
+
+          {/* Government Jobs Section */}
+          <div className="mb-6">
+            <p className="text-secondary-400 text-xs font-bold uppercase tracking-wider mb-3">Government Jobs</p>
+            <Link
+              to="/employee/government-jobs"
+              className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-secondary-800 transition font-medium text-white hover:text-white"
+            >
+              <Briefcase size={20} />
+              Browse Jobs
+            </Link>
+            <Link
+              to="/employee/government-applications"
+              className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-secondary-800 transition font-medium text-white hover:text-white"
+            >
+              <CheckSquare size={20} />
+              My Applications
             </Link>
           </div>
 

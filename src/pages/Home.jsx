@@ -309,24 +309,24 @@ const Home = () => {
       </section>
 
       {/* CTA */}
-      <section className="py-16 bg-secondary-900 text-white">
+      <section className="py-16 bg-white text-secondary-800">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
-          <h2 className="text-2xl md:text-3xl font-bold text-white">
+          <h2 className="text-2xl md:text-3xl font-bold text-secondary-900">
             Ready to take the next step in your career or hiring journey?
           </h2>
-          <p className="text-sm md:text-lg text-secondary-200">
+          <p className="text-sm md:text-lg text-secondary-600">
             Join JobConnect for free and start matching with the right opportunities today.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               to="/register"
-              className="w-full sm:w-auto bg-accent-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-accent-600 transition text-sm md:text-base"
+              className="w-full sm:w-auto bg-accent-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-accent-600 transition text-sm md:text-base hover:text-white"
             >
               Get Started Free
             </Link>
             <Link
               to="/about"
-              className="w-full sm:w-auto border-2 border-secondary-200 text-secondary-100 px-8 py-3 rounded-lg font-semibold hover:bg-secondary-800 transition text-sm md:text-base"
+              className="w-full sm:w-auto border-2 border-secondary-600 text-secondary-600 px-8 py-3 rounded-lg font-semibold hover:bg-secondary-800 transition text-sm md:text-base hover:text-white hover:border-secondary-800"
             >
               Learn more
             </Link>
